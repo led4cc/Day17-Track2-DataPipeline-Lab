@@ -20,3 +20,24 @@ Answer briefly, in your own words. This is graded on reasoning, not length.
    one where the graph is overkill.
 
 _Write your answers below._
+
+The quietest failure would be flattening traces incorrectly. If parent/child spans
+lose `trace_id`, `split`, or root status, the Bronze table still looks populated,
+but eval rows, costs, and preference pairs become wrong. I would detect it with
+span-count checks, one-row-per-root trace summaries, and alerts when eval/pair
+counts suddenly drift.
+
+Skipping decontamination means the model trains on the same prompts used for
+grading. Offline eval would look better because the model memorized benchmark
+answers, not because it generalized. The lie would show up as high eval scores
+but weak performance on new production prompts or a fresh holdout set.
+
+A dangerous feature is a user's "total spend" or "risk score" in an e-commerce
+or finance system. If I join the latest value instead of the value known at the
+event time, the model sees purchases, refunds, or fraud decisions that happened
+after the prediction moment.
+
+The knowledge graph answers the multi-hop question "where does a widget ship
+from?" because it can traverse widget -> accessory -> Hanoi fulfillment center.
+Flat chunk retrieval struggles because the facts live in separate chunks. The
+graph is overkill for a single-hop lookup like "what is the widget return window?"
