@@ -1,4 +1,4 @@
--- Staging: 1:1 with the raw seed, but typed, filtered to valid rows, and
+-- Staging: 1:1 with the raw orders table, but typed, filtered to valid rows, and
 -- deduplicated on the natural key. This is the SQL twin of pipeline/transform.py.
 with src as (
     select * from {{ ref('raw_orders') }}

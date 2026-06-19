@@ -8,12 +8,16 @@ import duckdb
 from . import config
 
 
+def _sql_string(value: str) -> str:
+    return "'" + value.replace("'", "''") + "'"
+
+
 def extract_to_bronze(con: duckdb.DuckDBPyConnection) -> int:
     con.execute(f"DROP TABLE IF EXISTS {config.BRONZE}")
     con.execute(
         f"""
         CREATE TABLE {config.BRONZE} AS
-        SELECT * FROM read_csv_auto('{config.RAW_CSV.as_posix()}',
+        SELECT * FROM read_csv_auto({_sql_string(config.RAW_CSV.as_posix())},
                                     header=true, all_varchar=true)
         """
     )
